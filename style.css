@@ -1,0 +1,169 @@
+:root{
+    --text: #1f1f1f;
+    --background-light: #f6f6f6;
+    --background-dark: #1f1f3f;
+    --highlight-background: #c3d7e6;
+    --hover: #95c3e6;
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-light);
+}
+
+body *{
+    box-sizing: border-box;
+}
+
+/************************** HEADER SECTION **************************/
+.header-row{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    padding: 25px;
+}
+
+/************************** CONFIG SECTION **************************/
+.config-row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+/*************************** GAME SECTION ***************************/
+.game-section{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-self: start;
+    gap: 20px;
+}
+
+.game-section .grid-section{
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 5px;
+}
+
+.game-section .current-clue{
+    padding: 10px 25px;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    background-color: var(--highlight-background);
+}
+
+.game-section .grid-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    border: 2px solid black;
+}
+
+/*************************** LIST SECTION ***************************/
+.list-container{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+.list-container .list-title{
+    text-align: left;
+}
+
+.list-container .list-outer{
+    flex: 1;
+    position: relative;
+}
+
+.list-container .list-inner{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+}
+
+/**************************** CLUE ROW ****************************/
+.clue-row{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 4px 15px;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.clue-row:hover{
+    background-color: var(--hover);
+}
+
+.clue-row.highlighted{
+    background-color: var(--hover);
+}
+
+.clue-row.kinda-highlighted{
+    background-color: var(--highlight-background);
+}
+
+.clue-row > div{
+    display: flex;
+    align-self: center;
+}
+
+.clue-row .clue-label{
+    justify-content: end;
+}
+
+.clue-row .clue{
+    justify-content: start;
+    flex: 1;
+}
+
+/**************************** GRID STUFF ****************************/
+.grid-row{
+    display: flex;
+}
+
+.grid-cell{
+    flex: 1;
+    aspect-ratio: 1;
+    position: relative;
+    border: 1px solid gray;
+    cursor: pointer;
+}
+
+.grid-cell.blank{
+    background-color: black;
+    border: 1px solid black;
+}
+
+.grid-cell.highlighted{
+    background-color: var(--hover);
+}
+
+.grid-cell.selected{
+    background-color: #f0df24;
+}
+
+.grid-cell .label{
+    position: absolute;
+    font-size: 25px;
+}
+
+.grid-cell .value{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    font-size: 75px;
+}
