@@ -25,6 +25,11 @@ class GridCell extends HTMLElement{
         this.dispatchEvent(new Event('input'));
     };
 
+    clear(){
+        this.querySelector('.value').innerHTML = '';
+        this.dispatchEvent(new Event('backspace'));
+    };
+
     checkAnswer(){
         return this.classList.contains('blank') ? true : this.value === this.answer;
     };

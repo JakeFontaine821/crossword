@@ -14,13 +14,13 @@
     const cellArray = [];
     let direction = 0; // 1 for down
 
-    function selectClue(clueElement){
+    function selectClue(clueElement, keepSelectedCell=false){
         // Set the highlighted cells
         for(const cell of document.querySelectorAll('.grid-cell.highlighted')){ cell.classList.remove('highlighted'); }
         for(const cellIndex of clueElement.cells){ cellArray[cellIndex].classList.add('highlighted'); }
 
         // Selecting new set of cell, see if current selected cell is in row/column
-        let selectedCellInClueCells = clueElement.cells.map(cellIndex => cellArray[cellIndex]).find(cellElement => cellElement.classList.contains('selected'));
+        let selectedCellInClueCells = keepSelectedCell ? clueElement.cells.map(cellIndex => cellArray[cellIndex]).find(cellElement => cellElement.classList.contains('selected')) : null;
 
         // Check to see if we need to change the selected cell to the first blank cell in row/column
         if(!selectedCellInClueCells){
@@ -34,8 +34,13 @@
             }
         }
 
+        // selected cells is still null cause every cell in the new element is set already, just selected the first one
+        if(!selectedCellInClueCells){
+            cellArray[clueElement.cells[0]].classList.add('selected');
+            selectedCellInClueCells = cellArray[clueElement.cells[0]];
+        }
+
         // Highlight clues
-        // console.log(selectedCellInClueCells.clues);
         for(const clueElement of clueElements){ clueElement.classList.remove('highlighted', 'kinda-highlighted'); }
         clueElements[selectedCellInClueCells.clues[0]].classList.add(!direction ? 'highlighted' : 'kinda-highlighted');
         clueElements[selectedCellInClueCells.clues[1]].classList.add(direction ? 'highlighted' : 'kinda-highlighted');
@@ -52,6 +57,8 @@
         clueElements.push(newClueRow);
 
         newClueRow.addEventListener('click', () => {
+            if(newClueRow.classList.contains('highlighted')){ return; }
+
             direction = newClueRow.direction;
             selectClue(newClueRow);
         });
@@ -72,11 +79,13 @@
             cellArray.push(newCell);
 
             newCell.addEventListener('click', () => {
+                if(newCell.classList.contains('blank')){ return; }
+
                 for(const cell of document.querySelectorAll('.grid-cell.selected')){ cell.classList.remove('selected'); }
                 // for(const cell of document.querySelectorAll('.grid-cell.highlighted')){ cell.classList.remove('highlighted'); }
 
                 newCell.classList.add('selected');
-                selectClue(clueElements[newCell.clues[direction]]);
+                selectClue(clueElements[newCell.clues[direction]], true);
             });
 
             newCell.addEventListener('input', () => {
@@ -85,10 +94,22 @@
 
                 const highlightedCells = Array.from(document.querySelectorAll('.grid-cell.highlighted'));
                 const indexOfSelectedCell = highlightedCells.findIndex(cell => cell === newCell);
-                if(indexOfSelectedCell !== highlightedCells.length-1){
-                    newCell.classList.remove('selected');
-                    highlightedCells[indexOfSelectedCell+1].classList.add('selected');
-                }
+
+                // if not at the end of the word go to the next cell in the word
+                if(indexOfSelectedCell >= highlightedCells.length-1){ return; }
+                newCell.classList.remove('selected');
+                highlightedCells[indexOfSelectedCell+1].classList.add('selected');
+                selectClue(clueElements[newCell.clues[direction]], true);
+            });
+
+            newCell.addEventListener('backspace', () => {
+                const highlightedCells = Array.from(document.querySelectorAll('.grid-cell.highlighted'));
+                const indexOfSelectedCell = highlightedCells.findIndex(cell => cell === newCell);
+
+                // if not on the first cell go backwards to the previous cell in the word
+                if(!indexOfSelectedCell){ return; }
+                newCell.classList.remove('selected');
+                highlightedCells[indexOfSelectedCell-1].classList.add('selected');
             });
 
             gridRow.appendChild(newCell);
@@ -112,4 +133,40 @@
         const seconds = `${elapsedTime % 60}`.padStart(2, '0');
         configRow.innerHTML = `${Math.floor(elapsedTime / 3600) ? `${hours}:` : ''}${minutes}:${seconds}`;
     }, 1000);
+
+    // Define player input
+    document.addEventListener('keydown', (e) => {
+        // Player input for selected square
+        if(/^[a-zA-Z]$/.test(e.key)){
+            document.querySelector('grid-cell.selected').value = e.key.toUpperCase();
+            return;
+        }
+
+        // Remove the value from the current selected cell and move one square back in the selected word
+        if(e.key === 'Backspace'){
+            document.querySelector('grid-cell.selected').clear();
+            return;
+        }
+
+        // Switch the direction and set the new selected clue
+        if(e.key === 'Tab'){
+            e.preventDefault();
+
+            direction = direction ? 0 : 1;
+            selectClue(clueElements.find(element => element.classList.contains('kinda-highlighted')), true);
+            return;
+        }
+
+        // Move to the next clue
+        if(e.key === 'Enter'){
+            e.preventDefault();
+
+            const currentClueIndex = clueElements.findIndex(element => element.classList.contains('highlighted'));
+            const newClueElement = clueElements[(currentClueIndex+1) % clueElements.length];
+
+            direction = newClueElement.direction;
+            selectClue(newClueElement);
+            return;
+        }
+    });
 })();
