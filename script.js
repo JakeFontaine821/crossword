@@ -1,11 +1,13 @@
 (async () => {
+    // await new Promise(resolve => setTimeout(() => resolve(), 25000));
+
     const publicAPICall = await fetch('https://server-lkt6.onrender.com/nytimes/mini');
     const miniJson = await publicAPICall.json();
     if(!miniJson.success){ return console.error('Failed to Load game data'); }
 
     const miniData = miniJson.data;
     const dataBody = miniData.body[0];
-    console.log(miniData);
+    // console.log(miniData);
     if(!miniData || !dataBody){ return console.error('Failed to parse data object'); }
 
     // When clue row is clicked display info here
@@ -169,4 +171,7 @@
             return;
         }
     });
+
+    // Remove loading screen
+    document.querySelector('.loading-screen').classList.add('hidden');
 })();
