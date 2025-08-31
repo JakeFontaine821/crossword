@@ -229,5 +229,5 @@ body *{
     display: flex;
     justify-content: center;
     align-items: end;
-    font-size: 350%;
+    /* font-size: 350%; */
 }
