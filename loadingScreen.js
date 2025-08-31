@@ -7,6 +7,7 @@ class loadingScreen extends HTMLElement{
         this.innerHTML = `
             <div class="spinner" title="Its still loading I promise 😭"></div>
             <div class="text"></div>
+            <div class="error-text"></div>
         `;
 
         const textElement = this.querySelector('.text');
@@ -51,6 +52,10 @@ class loadingScreen extends HTMLElement{
 
             window.clearInterval(messageCycleInterval);
         }, messageTime * 1000);
+    };
+
+    setErrorText(text){
+        this.querySelector('.error-text').innerHTML = text;
     };
 };
 customElements.define('loading-screen', loadingScreen);

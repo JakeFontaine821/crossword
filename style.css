@@ -24,6 +24,22 @@ body *{
 }
 
 /************************** HEADER SECTION **************************/
+.nav-panel{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 25px;
+    gap: 20px;
+}
+
+.nav-panel > *{
+    cursor: pointer;
+    user-select: none;
+}
+
+/************************** HEADER SECTION **************************/
 .loading-screen{
     position: absolute;
     height: 100vh;
