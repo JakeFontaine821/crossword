@@ -1,9 +1,11 @@
+/************************** GLOBAL STYLES **************************/
 :root{
     --text: #1f1f1f;
     --background-light: #f6f6f6;
     --background-dark: #1f1f3f;
     --highlight-background: #c3d7e6;
     --hover: #95c3e6;
+    --accent: #e19b9b;
 }
 
 body{
@@ -23,65 +25,58 @@ body *{
     display: none !important;
 }
 
-/************************** HEADER SECTION **************************/
+/************************** NAV PANEL **************************/
 .nav-panel{
-    position: absolute;
+    position: relative;
     height: 100vh;
+    width: 75px;
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    padding: 25px;
-    gap: 20px;
-    border: 1px solid black;
+    padding: 15px 0px;
 }
 
 .nav-panel > *{
+    height: 60px;
+    width: 60px;
+    fill: var(--text);
+}
+
+.nav-panel svg{
+    height: 35px;
+    width: 35px;
+}
+
+.nav-panel .button{
     cursor: pointer;
     user-select: none;
-}
-
-/************************** HEADER SECTION **************************/
-.loading-screen{
-    position: absolute;
-    height: 100vh;
-    width: 100vw;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 999;
-    background-color: var(--background-light);
-    gap: 20px;
 }
 
-.loading-screen .spinner{
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    border: 10px solid var(--background-light);
-    border-left: 10px solid var(--text);
-    animation: spin 2s infinite linear;
+.nav-panel .selection-highlight{
+    position: absolute;
+    border-radius: 15px;
+    background-color: var(--accent);
+    z-index: -1;
+    top: 15px;
+    transition: top .2s;
 }
 
-@keyframes spin {
-    from {rotate: 0deg;}
-    to {rotate: 360deg;}
+/************************** GENERAL PAGE STYLES **************************/
+.page{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.loading-screen .text{
-    font-size: 20px;
-    animation: fadeText 5s infinite linear;
-}
+/************************** LANDING PAGE **************************/
 
-@keyframes fadeText {
-    0%   {opacity: 0%;}
-    5%   {opacity: 0%;}
-    25%  {opacity: 100%;}
-    75%  {opacity: 100%;}
-    95% {opacity: 0%;}
-    100% {opacity: 0%;}
-}
 
 /************************** HEADER SECTION **************************/
 .header-row{
@@ -233,3 +228,53 @@ body *{
     align-items: end;
     /* font-size: 350%; */
 }
+
+
+
+
+/***********************************************************************************************************/
+/* STYLING IM NOT USING RIGHT NOW                                                                          */
+/***********************************************************************************************************/
+
+
+/************************** LOADING PAGE **************************/
+/*.loading-screen{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    background-color: var(--background-light);
+    gap: 20px;
+}
+
+.loading-screen .spinner{
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 10px solid var(--background-light);
+    border-left: 10px solid var(--text);
+    animation: spin 2s infinite linear;
+}
+
+@keyframes spin {
+    from {rotate: 0deg;}
+    to {rotate: 360deg;}
+}
+
+.loading-screen .text{
+    font-size: 20px;
+    animation: fadeText 5s infinite linear;
+}
+
+@keyframes fadeText {
+    0%   {opacity: 0%;}
+    5%   {opacity: 0%;}
+    25%  {opacity: 100%;}
+    75%  {opacity: 100%;}
+    95% {opacity: 0%;}
+    100% {opacity: 0%;}
+}*/
