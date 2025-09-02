@@ -26,12 +26,14 @@ body *{
 /************************** HEADER SECTION **************************/
 .nav-panel{
     position: absolute;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
     padding: 25px;
     gap: 20px;
+    border: 1px solid black;
 }
 
 .nav-panel > *{
