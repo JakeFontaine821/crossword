@@ -1,3 +1,6 @@
+/**********************************************************************************************************************************/
+/*                                            SETUP THE REGULAR PAGE                                                              */
+/**********************************************************************************************************************************/
 const gamePageClasses = ['mini', 'daily'];
 const navButtons = document.querySelector('.nav-panel').children;
 const gamePages = Array.from(document.querySelectorAll('.game-page'));
@@ -156,6 +159,8 @@ for(const navButton of navButtons){
 
     // Define player input
     document.addEventListener('keydown', (e) => {
+        if(document.querySelector('.mini.hidden')){ return; }
+
         // Player input for selected square
         if(/^[a-zA-Z]$/.test(e.key)){
             document.querySelector('.mini grid-cell.selected').value = e.key.toUpperCase();
@@ -189,9 +194,6 @@ for(const navButton of navButtons){
             return;
         }
     });
-
-    // Remove loading screen
-    document.querySelector('.loading-screen').classList.add('hidden');
 })();
 
 
@@ -334,4 +336,45 @@ for(const navButton of navButtons){
         const seconds = `${elapsedTime % 60}`.padStart(2, '0');
         configRow.innerHTML = `${Math.floor(elapsedTime / 3600) ? `${hours}:` : ''}${minutes}:${seconds}`;
     }, 1000);
+
+    // Define player input
+    document.addEventListener('keydown', (e) => {
+        if(document.querySelector('.daily.hidden')){ return; }
+
+        // Player input for selected square
+        if(/^[a-zA-Z]$/.test(e.key)){
+            document.querySelector('.daily grid-cell.selected').value = e.key.toUpperCase();
+            return;
+        }
+
+        // Remove the value from the current selected cell and move one square back in the selected word
+        if(e.key === 'Backspace'){
+            document.querySelector('.daily grid-cell.selected').clear();
+            return;
+        }
+
+        // Switch the direction and set the new selected clue
+        if(e.key === 'Tab'){
+            e.preventDefault();
+
+            direction = direction ? 0 : 1;
+            selectClue(clueElements.find(element => element.classList.contains('kinda-highlighted')), true);
+            return;
+        }
+
+        // Move to the next clue
+        if(e.key === 'Enter'){
+            e.preventDefault();
+
+            const currentClueIndex = clueElements.findIndex(element => element.classList.contains('highlighted'));
+            const newClueElement = clueElements[(currentClueIndex+1) % clueElements.length];
+
+            direction = newClueElement.direction;
+            selectClue(newClueElement);
+            return;
+        }
+    });
+
+    // Remove loading screen
+    document.querySelector('.loading-screen').classList.add('hidden');
 })();
