@@ -259,7 +259,7 @@ class MiniPage extends HTMLElement{
             // Setup check functions
             const checkDropdown = this.querySelector('.check-dropdown');
             checkDropdown.addEventListener('cell', () => this.querySelector('.grid-cell.selected').userCheck());
-            checkDropdown.addEventListener('word', () => { console.log('ymaom'); for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.userCheck(); } });
+            checkDropdown.addEventListener('word', () => { for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.userCheck(); } });
             checkDropdown.addEventListener('puzzle', () => { for(const cell of this.cellArray){ cell.userCheck(); } });
 
             this.dispatchEvent(new Event('loaded'));
