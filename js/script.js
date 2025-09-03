@@ -1,24 +1,32 @@
+/**********************************************************************************************************************************/
+/*                                            LOAD THE MINI CROSSWORD                                                             */
+/**********************************************************************************************************************************/
+
+
+
+/**********************************************************************************************************************************/
+/*                                            LOAD THE DAILY CROSSWORD                                                            */
+/**********************************************************************************************************************************/
 (async () => {
     // await new Promise(resolve => setTimeout(() => resolve(), 25000));
 
-    const publicAPICall = await fetch('https://server-lkt6.onrender.com/nytimes/mini');
-    const miniJson = await publicAPICall.json();
-    if(!miniJson.success){ return console.error('Failed to Load game data'); }
+    const publicAPICall = await fetch('https://server-lkt6.onrender.com/nytimes/daily');
+    const dailyJson = await publicAPICall.json();
+    if(!dailyJson.success){ return document.querySelector('.loading-screen').setErrorText('Fetch failed - reload the page'); }
 
-    const miniData = miniJson.data;
-    const dataBody = miniData.body[0];
-    // console.log(miniData);
-    if(!miniData || !dataBody){ return console.error('Failed to parse data object'); }
+    const dailyData = dailyJson.data;
+    const dataBody = dailyData.body[0];
+    if(!dailyData || !dataBody){ return document.querySelector('.loading-screen').setErrorText('Failed to parse data object - reload the page'); }
 
     // When clue row is clicked display info here
-    const currentClueDisplay = document.querySelector('.current-clue');
+    const currentClueDisplay = document.querySelector('.daily .current-clue');
     const clueElements = [];
     const cellArray = [];
     let direction = 0; // 1 for down
 
     function selectClue(clueElement, keepSelectedCell=false){
         // Set the highlighted cells
-        for(const cell of document.querySelectorAll('.grid-cell.highlighted')){ cell.classList.remove('highlighted'); }
+        for(const cell of document.querySelectorAll('.daily .grid-cell.highlighted')){ cell.classList.remove('highlighted'); }
         for(const cellIndex of clueElement.cells){ cellArray[cellIndex].classList.add('highlighted'); }
 
         // Selecting new set of cell, see if current selected cell is in row/column
@@ -26,7 +34,7 @@
 
         // Check to see if we need to change the selected cell to the first blank cell in row/column
         if(!selectedCellInClueCells){
-            for(const cell of document.querySelectorAll('.grid-cell.selected')){ cell.classList.remove('selected'); }
+            for(const cell of document.querySelectorAll('.daily .grid-cell.selected')){ cell.classList.remove('selected'); }
             for(const cellIndex of clueElement.cells){
                 if(!cellArray[cellIndex].value){
                     cellArray[cellIndex].classList.add('selected');
@@ -52,8 +60,8 @@
     };
 
     // Add the clues to the respective lists
-    const acrossList = document.querySelector('.across-list .list-inner');
-    const downList = document.querySelector('.down-list .list-inner');
+    const acrossList = document.querySelector('.daily .across-list .list-inner');
+    const downList = document.querySelector('.daily .down-list .list-inner');
     for(const clueObject of dataBody.clues){
         const newClueRow = new ClueRow(clueObject);
         clueElements.push(newClueRow);
@@ -71,7 +79,7 @@
 
     // Create the grid
     let cellIndex = 0;
-    const gridContainer = document.querySelector('.grid-container');
+    const gridContainer = document.querySelector('.daily .grid-container');
     for (let i = 0; i < dataBody.dimensions.height; i++) {
         const gridRow = document.createElement('div');
         gridRow.classList.add('grid-row');
@@ -83,8 +91,8 @@
             newCell.addEventListener('click', () => {
                 if(newCell.classList.contains('blank')){ return; }
 
-                for(const cell of document.querySelectorAll('.grid-cell.selected')){ cell.classList.remove('selected'); }
-                // for(const cell of document.querySelectorAll('.grid-cell.highlighted')){ cell.classList.remove('highlighted'); }
+                for(const cell of document.querySelectorAll('.daily .grid-cell.selected')){ cell.classList.remove('selected'); }
+                // for(const cell of document.querySelectorAll('.daily .grid-cell.highlighted')){ cell.classList.remove('highlighted'); }
 
                 newCell.classList.add('selected');
                 selectClue(clueElements[newCell.clues[direction]], true);
@@ -94,7 +102,7 @@
                 const falseCell = cellArray.some(cell => !cell.checkAnswer());
                 if(!falseCell){ console.log('you win :)'); }
 
-                const highlightedCells = Array.from(document.querySelectorAll('.grid-cell.highlighted'));
+                const highlightedCells = Array.from(document.querySelectorAll('.daily .grid-cell.highlighted'));
                 const indexOfSelectedCell = highlightedCells.findIndex(cell => cell === newCell);
 
                 // if not at the end of the word go to the next cell in the word
@@ -105,7 +113,7 @@
             });
 
             newCell.addEventListener('backspace', () => {
-                const highlightedCells = Array.from(document.querySelectorAll('.grid-cell.highlighted'));
+                const highlightedCells = Array.from(document.querySelectorAll('.daily .grid-cell.highlighted'));
                 const indexOfSelectedCell = highlightedCells.findIndex(cell => cell === newCell);
 
                 // if not on the first cell go backwards to the previous cell in the word
@@ -126,7 +134,7 @@
 
     // Setup play timer
     let elapsedTime = 0;
-    const configRow = document.querySelector('.config-row');
+    const configRow = document.querySelector('.daily .config-row');
     const timer = setInterval(() => {
         elapsedTime++;
 
@@ -138,15 +146,17 @@
 
     // Define player input
     document.addEventListener('keydown', (e) => {
+        if(document.querySelector('.daily.hidden')){ return; }
+
         // Player input for selected square
         if(/^[a-zA-Z]$/.test(e.key)){
-            document.querySelector('grid-cell.selected').value = e.key.toUpperCase();
+            document.querySelector('.daily grid-cell.selected').value = e.key.toUpperCase();
             return;
         }
 
         // Remove the value from the current selected cell and move one square back in the selected word
         if(e.key === 'Backspace'){
-            document.querySelector('grid-cell.selected').clear();
+            document.querySelector('.daily grid-cell.selected').clear();
             return;
         }
 

@@ -1,9 +1,14 @@
+/************************** GLOBAL STYLES **************************/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 :root{
     --text: #1f1f1f;
     --background-light: #f6f6f6;
     --background-dark: #1f1f3f;
     --highlight-background: #c3d7e6;
+    --shadow-background: #afafaf22;
     --hover: #95c3e6;
+    --accent: #e19b9b;
 }
 
 body{
@@ -13,6 +18,12 @@ body{
     padding: 0;
     background-color: var(--background-light);
     overflow: hidden;
+
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
 }
 
 body *{
@@ -23,47 +34,72 @@ body *{
     display: none !important;
 }
 
-/************************** HEADER SECTION **************************/
-.loading-screen{
-    position: absolute;
+*[disabled]{
+    pointer-events: none;
+    opacity: 30%;
+}
+
+/************************** NAV PANEL **************************/
+.nav-panel{
+    position: relative;
     height: 100vh;
-    width: 100vw;
+    width: 75px;
     display: flex;
     flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 15px 0px;
+}
+
+.nav-panel > *{
+    height: 60px;
+    width: 60px;
+    fill: var(--text);
+}
+
+.nav-panel svg{
+    height: 35px;
+    width: 35px;
+}
+
+.nav-panel .button{
+    cursor: pointer;
+    user-select: none;
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 999;
-    background-color: var(--background-light);
-    gap: 20px;
 }
 
-.loading-screen .spinner{
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    border: 10px solid var(--background-light);
-    border-left: 10px solid var(--text);
-    animation: spin 2s infinite linear;
+.nav-panel .selection-highlight{
+    position: absolute;
+    border-radius: 15px;
+    background-color: var(--accent);
+    z-index: -1;
+    top: 15px;
+    transition: top .2s;
+    pointer-events: none;
 }
 
-@keyframes spin {
-    from {rotate: 0deg;}
-    to {rotate: 360deg;}
+/************************** GENERAL PAGE STYLES **************************/
+.page{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
 }
 
-.loading-screen .text{
-    font-size: 20px;
-    animation: fadeText 5s infinite linear;
+.page .page-container{
+    position: relative;
+    width: 70vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-@keyframes fadeText {
-    0%   {opacity: 0%;}
-    5%   {opacity: 0%;}
-    25%  {opacity: 100%;}
-    75%  {opacity: 100%;}
-    95% {opacity: 0%;}
-    100% {opacity: 0%;}
-}
+/************************** LANDING PAGE **************************/
+
 
 /************************** HEADER SECTION **************************/
 .header-row{
@@ -79,6 +115,54 @@ body *{
     justify-content: center;
     align-items: center;
     padding: 10px;
+    gap: 5px;
+    fill: var(--text);
+}
+
+.config-row > *{
+    user-select: none;
+    cursor: pointer;
+    display: flex;
+    align-self: center;
+}
+
+/************************** PAUSE POPUP **************************/
+.popup{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--shadow-background);
+}
+
+.popup .popup-container{
+    width: 500px;
+    height: 550px;
+    background-color: var(--background-light);
+    box-shadow: 0px 0px 10px 5px #00000033;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup .header{
+    font-size: 50px;
+}
+
+.pause-popup .resume-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 25px;
+    background-color: var(--hover);
+    border: 1px solid black;
+    border-radius: 25px;
+    cursor: pointer;
+    user-select: none;
 }
 
 /*************************** GAME SECTION ***************************/
@@ -86,7 +170,7 @@ body *{
     flex: 1;
     display: flex;
     justify-content: center;
-    align-self: start;
+    align-self: center;
     gap: 20px;
 }
 
@@ -213,5 +297,57 @@ body *{
     display: flex;
     justify-content: center;
     align-items: end;
-    font-size: 350%;
+    font-size: 400%;
+    user-select: none;
+    font-weight: 600;
 }
+
+
+
+
+/***********************************************************************************************************/
+/* STYLING IM NOT USING RIGHT NOW                                                                          */
+/***********************************************************************************************************/
+
+
+/************************** LOADING PAGE **************************/
+/*.loading-screen{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    background-color: var(--background-light);
+    gap: 20px;
+}
+
+.loading-screen .spinner{
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 10px solid var(--background-light);
+    border-left: 10px solid var(--text);
+    animation: spin 2s infinite linear;
+}
+
+@keyframes spin {
+    from {rotate: 0deg;}
+    to {rotate: 360deg;}
+}
+
+.loading-screen .text{
+    font-size: 20px;
+    animation: fadeText 5s infinite linear;
+}
+
+@keyframes fadeText {
+    0%   {opacity: 0%;}
+    5%   {opacity: 0%;}
+    25%  {opacity: 100%;}
+    75%  {opacity: 100%;}
+    95% {opacity: 0%;}
+    100% {opacity: 0%;}
+}*/
