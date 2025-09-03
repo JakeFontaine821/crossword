@@ -10,6 +10,11 @@ class MiniPage extends HTMLElement{
                 <div class="config-row">
                     <div class="timer-display">00:00</div>
                     <div class="pause-button"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M360-320h80v-320h-80v320Zm160 0h80v-320h-80v320ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg></div>
+                    
+                    <div class="dropdown-section">
+                        <drop-down class="reveal-dropdown" header="Reveal" options="Cell,Word,Puzzle"></drop-down>
+                        <drop-down class="check-dropdown" header="Check" options="Cell,Word,Puzzle"></drop-down>
+                    </div>
                 </div>
                 <div class="game-section">
                     <div class="grid-section">
@@ -59,24 +64,24 @@ class MiniPage extends HTMLElement{
             // When clue row is clicked display info here
             const currentClueDisplay = this.querySelector('.current-clue');
             this.clueElements = [];
-            const cellArray = [];
+            this.cellArray = [];
             let direction = 0; // 1 for down
 
             const selectClue = (clueElement, keepSelectedCell=false) => {
                 // Set the highlighted cells
                 for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.classList.remove('highlighted'); }
-                for(const cellIndex of clueElement.cells){ cellArray[cellIndex].classList.add('highlighted'); }
+                for(const cellIndex of clueElement.cells){ this.cellArray[cellIndex].classList.add('highlighted'); }
 
                 // Selecting new set of cell, see if current selected cell is in row/column
-                let selectedCellInClueCells = keepSelectedCell ? clueElement.cells.map(cellIndex => cellArray[cellIndex]).find(cellElement => cellElement.classList.contains('selected')) : null;
+                let selectedCellInClueCells = keepSelectedCell ? clueElement.cells.map(cellIndex => this.cellArray[cellIndex]).find(cellElement => cellElement.classList.contains('selected')) : null;
 
                 // Check to see if we need to change the selected cell to the first blank cell in row/column
                 if(!selectedCellInClueCells){
                     for(const cell of this.querySelectorAll('.grid-cell.selected')){ cell.classList.remove('selected'); }
                     for(const cellIndex of clueElement.cells){
-                        if(!cellArray[cellIndex].value){
-                            cellArray[cellIndex].classList.add('selected');
-                            selectedCellInClueCells = cellArray[cellIndex];
+                        if(!this.cellArray[cellIndex].value){
+                            this.cellArray[cellIndex].classList.add('selected');
+                            selectedCellInClueCells = this.cellArray[cellIndex];
                             break;
                         }
                     }
@@ -84,8 +89,8 @@ class MiniPage extends HTMLElement{
 
                 // selected cells is still null cause every cell in the new element is set already, just selected the first one
                 if(!selectedCellInClueCells){
-                    cellArray[clueElement.cells[0]].classList.add('selected');
-                    selectedCellInClueCells = cellArray[clueElement.cells[0]];
+                    this.cellArray[clueElement.cells[0]].classList.add('selected');
+                    selectedCellInClueCells = this.cellArray[clueElement.cells[0]];
                 }
 
                 // Highlight clues
@@ -130,7 +135,7 @@ class MiniPage extends HTMLElement{
 
                 for (let i = 0; i < dataBody.dimensions.width; i++) {
                     const newCell = new GridCell(dataBody.cells[cellIndex]);
-                    cellArray.push(newCell);
+                    this.cellArray.push(newCell);
 
                     newCell.addEventListener('click', () => {
                         if(newCell.classList.contains('blank')){ return; }
@@ -144,7 +149,9 @@ class MiniPage extends HTMLElement{
                     newCell.addEventListener('dblclick', () => switchDirection());
 
                     newCell.addEventListener('input', () => {
-                        const falseCell = cellArray.some(cell => !cell.checkAnswer());
+                        const falseCell = this.cellArray.some(cell => !cell.checkAnswer());
+
+                        // PLAYER WINS
                         if(!falseCell){
                             this.stopTime();
 
@@ -164,7 +171,7 @@ class MiniPage extends HTMLElement{
                             if(highlightedCells[i].value){ continue; }
                             
                             newCell.classList.remove('selected');
-                            highlightedCells[indexOfSelectedCell+1].classList.add('selected');
+                            highlightedCells[i].classList.add('selected');
                             selectClue(this.clueElements[newCell.clues[direction]], true);
                             break;
                         }
@@ -243,6 +250,18 @@ class MiniPage extends HTMLElement{
                 }
             });
 
+            // Setup reveal functions
+            const revealDropdown = this.querySelector('.reveal-dropdown');
+            revealDropdown.addEventListener('cell', () => this.querySelector('.grid-cell.selected').reveal());
+            revealDropdown.addEventListener('word', () => { for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.reveal(); } });
+            revealDropdown.addEventListener('puzzle', () => { for(const cell of this.cellArray){ cell.reveal(); } });
+
+            // Setup check functions
+            const checkDropdown = this.querySelector('.check-dropdown');
+            checkDropdown.addEventListener('cell', () => this.querySelector('.grid-cell.selected').userCheck());
+            checkDropdown.addEventListener('word', () => { console.log('ymaom'); for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.userCheck(); } });
+            checkDropdown.addEventListener('puzzle', () => { for(const cell of this.cellArray){ cell.userCheck(); } });
+
             this.dispatchEvent(new Event('loaded'));
         })();
     };
@@ -288,13 +307,6 @@ class MiniPage extends HTMLElement{
     hide(){
         this.stopTime();
         this.classList.add('hidden');
-    };
-
-    // debugging
-    win(){
-        for(const cell of this.querySelectorAll('.grid-cell')){
-            cell.win();
-        }
     };
 };
 customElements.define('mini-page', MiniPage);

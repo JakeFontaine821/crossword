@@ -8,6 +8,7 @@ class GridCell extends HTMLElement{
         this.innerHTML = cellObject.type ? `
             <div class="label">${cellObject.label ?? ''}</div>
             <div class="value"></div>
+            <div class="revealed-flag hidden"><svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="95" fill="#33c"/><circle cx="100" cy="100" r="50" fill="#000"/></svg></div>
         ` : '';
         
         if(cellObject.type){
@@ -21,13 +22,16 @@ class GridCell extends HTMLElement{
     };
 
     set value(newValue){
-        this.querySelector('.value').innerHTML = newValue;
+        if(!this.classList.contains('checked-correct')){ this.querySelector('.value').innerHTML = newValue; }
         this.dispatchEvent(new Event('input'));
     };
 
     clear(emit=false){
-        if(this.value){
+        if(this.value && !this.classList.contains('checked-correct')){
             this.querySelector('.value').innerHTML = '';
+
+            this.classList.remove('checked-correct');
+            this.classList.remove('checked-incorrect');
             return;
         }
         
@@ -38,9 +42,19 @@ class GridCell extends HTMLElement{
         return this.classList.contains('blank') ? true : this.value === this.answer;
     };
 
-    // debugging
-    win(){
+    userCheck(){
+        if(this.classList.contains('blank') || !this.value){ return; }
+
+        const correct = this.checkAnswer();
+        this.classList.toggle('checked-correct', correct);
+        this.classList.toggle('checked-incorrect', !correct);
+    };
+
+    reveal(){
         if(this.classList.contains('blank')){ return; }
+
+        this.querySelector('.revealed-flag').classList.remove('hidden');
+        this.classList.add('checked-correct');
         this.querySelector('.value').innerHTML = this.answer;
         this.dispatchEvent(new Event('input'));
     };

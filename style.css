@@ -9,6 +9,8 @@
     --shadow-background: #afafaf22;
     --hover: #95c3e6;
     --accent: #e19b9b;
+    --correct: #3333cc;
+    --incorrect: #cc3333;
 }
 
 body{
@@ -91,7 +93,7 @@ body *{
 
 .page .page-container{
     position: relative;
-    width: 70vw;
+    width: 65vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -111,12 +113,16 @@ body *{
 
 /************************** CONFIG SECTION **************************/
 .config-row{
+    width: 100%;
+    height: 50px;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px;
     gap: 5px;
     fill: var(--text);
+    border-top: 2px solid var(--shadow-background);
+    border-bottom: 2px solid var(--shadow-background);
 }
 
 .config-row > *{
@@ -124,6 +130,36 @@ body *{
     cursor: pointer;
     display: flex;
     align-self: center;
+}
+
+.config-row > .dropdown-section{
+    position: absolute;
+    right: 0px;
+}
+
+/************************** CONFIG SECTION **************************/
+.drop-down{
+    position: relative;
+}
+
+.drop-down *:not(.dropdown-container){
+    width: 100px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--shadow-background);
+}
+
+.drop-down *:not(.dropdown-container):hover{
+    border-bottom: 1px solid black;
+}
+
+.drop-down .dropdown-container{
+    position: absolute;
+    top: 50px;
+    background-color: var(--background-light);
+    z-index: 999;
 }
 
 /************************** PAUSE POPUP **************************/
@@ -300,6 +336,25 @@ body *{
     font-size: 400%;
     user-select: none;
     font-weight: 600;
+}
+
+.grid-cell.checked-correct .value{
+    color: var(--correct);
+}
+
+.grid-cell.checked-incorrect .value{
+    color: var(--incorrect);
+}
+
+.grid-cell .revealed-flag{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.grid-cell .revealed-flag svg{
+    height: 15px;
+    width: 15px;
 }
 
 
