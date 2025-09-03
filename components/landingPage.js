@@ -9,5 +9,13 @@ class landingPage extends HTMLElement{
             This is my page, games are on the left
         `;
     };
+
+    show(){
+        this.classList.remove('hidden');
+    };
+
+    hide(){
+        this.classList.add('hidden');
+    };
 };
 customElements.define('landing-page', landingPage);

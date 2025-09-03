@@ -25,13 +25,24 @@ class GridCell extends HTMLElement{
         this.dispatchEvent(new Event('input'));
     };
 
-    clear(){
-        this.querySelector('.value').innerHTML = '';
-        this.dispatchEvent(new Event('backspace'));
+    clear(emit=false){
+        if(this.value){
+            this.querySelector('.value').innerHTML = '';
+            return;
+        }
+        
+        if(emit){ this.dispatchEvent(new Event('backspace')); }
     };
 
     checkAnswer(){
         return this.classList.contains('blank') ? true : this.value === this.answer;
+    };
+
+    // debugging
+    win(){
+        if(this.classList.contains('blank')){ return; }
+        this.querySelector('.value').innerHTML = this.answer;
+        this.dispatchEvent(new Event('input'));
     };
 };
 customElements.define('grid-cell', GridCell);

@@ -9,73 +9,36 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <!-- <loading-screen></loading-screen> -->
     <landing-page></landing-page>
+    <mini-page></mini-page>
+    <daily-page></daily-page>
 
     <!--  NAV PANEL -->
     <div class="nav-panel">
+        <div class="button selected" page="landing"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg></div>
+        <div class="button" page="mini" disabled><svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect x="15" y="15" width="170" height="170" rx="20" ry="20" fill="#8bbcf6" stroke="#000" stroke-width="10"/><path d="m100 20 80 80-80 80-80-80z"/><path fill="#fff" d="m100 30 35 35-35 35-35-35zm0 70 35 35-35 35-35-35z"/></svg></div>
+        <div class="button" page="daily" disabled><svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect x="15" y="15" width="170" height="170" rx="20" ry="20" stroke="#000" stroke-width="10"/><path fill="#fff" d="M75 16h52v52H75zM16 74h52v52H16zm116 0h52v52h-52zm-58 58h52v52H74zM35 16h33v52H16V35a20 20 0 0 1 19-19m97 116h52v33a20 20 0 0 1-19 19h-33Z"/></svg></div>
         <div class="selection-highlight"></div>
-        <div class="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg></div>
-        <div class="button"><svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect x="15" y="15" width="170" height="170" rx="20" ry="20" fill="#8bbcf6" stroke="#000" stroke-width="10"/><path d="m100 20 80 80-80 80-80-80z"/><path fill="#fff" d="m100 30 35 35-35 35-35-35zm0 70 35 35-35 35-35-35z"/></svg></div>
-        <div class="button"><svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect x="15" y="15" width="170" height="170" rx="20" ry="20" stroke="#000" stroke-width="10"/><path fill="#fff" d="M75 16h52v52H75zM16 74h52v52H16zm116 0h52v52h-52zm-58 58h52v52H74zM35 16h33v52H16V35a20 20 0 0 1 19-19m97 116h52v33a20 20 0 0 1-19 19h-33Z"/></svg></div>
     </div>
 
-    <script src="./navScript.js"></script>
-
-    <!--  MINI PAGE -->
-    <!-- <div class="mini game-page">
-        <div class="header-row">Mini Crossword :)</div>
-        <div class="config-row">00:00</div>
-        <div class="game-section">
-            <div class="grid-section">
-                <div class="current-clue"></div>
-                <div class="grid-container"></div>
-            </div>
-            <div class="across-list list-container">
-                <div class="list-title"><b>Across</b></div>
-                <div class="list-outer">
-                    <div class="list-inner"></div>
-                </div>
-            </div>
-            <div class="down-list list-container">
-                <div class="list-title"><b>Down</b></div>
-                <div class="list-outer">
-                    <div class="list-inner"></div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <!--  DAILY PAGE -->
-    <!-- <div class="daily game-page hidden">
-        <div class="header-row">Daily Crossword :)</div>
-        <div class="config-row">00:00</div>
-        <div class="game-section">
-            <div class="grid-section">
-                <div class="current-clue"></div>
-                <div class="grid-container"></div>
-            </div>
-            <div class="across-list list-container">
-                <div class="list-title"><b>Across</b></div>
-                <div class="list-outer">
-                    <div class="list-inner"></div>
-                </div>
-            </div>
-            <div class="down-list list-container">
-                <div class="list-title"><b>Down</b></div>
-                <div class="list-outer">
-                    <div class="list-inner"></div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     <!-- js teehee -->
-    <script src="./loadingScreen.js"></script>
-    <script src="./landingPage.js"></script>
+    <script>
+        const miniPage = document.querySelector('mini-page');
+        miniPage.addEventListener('loaded', () => document.querySelector('.nav-panel .button[page="mini"]').removeAttribute('disabled'));
 
-    <!-- <script src="./gridCell.js"></script>
-    <script src="./clueRow.js"></script>
-    <script src="./script.js"></script> -->
+        const dailyPage = document.querySelector('daily-page');
+        dailyPage.addEventListener('loaded', () => document.querySelector('.nav-panel .button[page="daily"]').removeAttribute('disabled'));
+    </script>
+
+    <script src="./components/landingPage.js"></script>
+    <script src="./components/miniPage.js"></script>
+    <script src="./components/dailyPage.js"></script>
+    
+    <script src="./components/winPopup.js"></script>
+    <script src="./components/pausePopup.js"></script>
+    <script src="./components/gridCell.js"></script>
+    <script src="./components/clueRow.js"></script>
+
+    <script src="./js/navScript.js"></script>
 </body>
 </html>
