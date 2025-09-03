@@ -11,6 +11,7 @@ Version 0.1.0
 - changed fonts
 - mini page nav button enables on page load
 - api call retries after 5 seconds if failed since everything depends on that call :cry:
+- hide clues on pause
 
 Version 0.0.3
 - Added a loading screen since the api sometimes can take upto a minute to load

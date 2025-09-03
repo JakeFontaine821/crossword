@@ -58,7 +58,7 @@ class MiniPage extends HTMLElement{
 
             // When clue row is clicked display info here
             const currentClueDisplay = this.querySelector('.current-clue');
-            const clueElements = [];
+            this.clueElements = [];
             const cellArray = [];
             let direction = 0; // 1 for down
 
@@ -89,9 +89,9 @@ class MiniPage extends HTMLElement{
                 }
 
                 // Highlight clues
-                for(const clueElement of clueElements){ clueElement.classList.remove('highlighted', 'kinda-highlighted'); }
-                clueElements[selectedCellInClueCells.clues[0]].classList.add(!direction ? 'highlighted' : 'kinda-highlighted');
-                clueElements[selectedCellInClueCells.clues[1]].classList.add(direction ? 'highlighted' : 'kinda-highlighted');
+                for(const clueElement of this.clueElements){ clueElement.classList.remove('highlighted', 'kinda-highlighted'); }
+                this.clueElements[selectedCellInClueCells.clues[0]].classList.add(!direction ? 'highlighted' : 'kinda-highlighted');
+                this.clueElements[selectedCellInClueCells.clues[1]].classList.add(direction ? 'highlighted' : 'kinda-highlighted');
 
                 // Set the clue text
                 currentClueDisplay.innerHTML = `${clueElement.label} - ${clueElement.text}`;
@@ -102,7 +102,7 @@ class MiniPage extends HTMLElement{
             const downList = this.querySelector('.down-list .list-inner');
             for(const clueObject of dataBody.clues){
                 const newClueRow = new ClueRow(clueObject);
-                clueElements.push(newClueRow);
+                this.clueElements.push(newClueRow);
 
                 newClueRow.addEventListener('click', () => {
                     if(newClueRow.classList.contains('highlighted')){ return; }
@@ -118,7 +118,7 @@ class MiniPage extends HTMLElement{
             // Create a function for switching the direction of the selected word to be used for double clicking a square and hitting tab
             const switchDirection = () => {
                 direction = direction ? 0 : 1;
-                selectClue(clueElements.find(element => element.classList.contains('kinda-highlighted')), true);
+                selectClue(this.clueElements.find(element => element.classList.contains('kinda-highlighted')), true);
             };
 
             // Create the grid
@@ -138,7 +138,7 @@ class MiniPage extends HTMLElement{
                         for(const cell of this.querySelectorAll('.grid-cell.selected')){ cell.classList.remove('selected'); }
 
                         newCell.classList.add('selected');
-                        selectClue(clueElements[newCell.clues[direction]], true);
+                        selectClue(this.clueElements[newCell.clues[direction]], true);
                     });
 
                     newCell.addEventListener('dblclick', () => switchDirection());
@@ -165,7 +165,7 @@ class MiniPage extends HTMLElement{
                             
                             newCell.classList.remove('selected');
                             highlightedCells[indexOfSelectedCell+1].classList.add('selected');
-                            selectClue(clueElements[newCell.clues[direction]], true);
+                            selectClue(this.clueElements[newCell.clues[direction]], true);
                             break;
                         }
                     });
@@ -189,7 +189,7 @@ class MiniPage extends HTMLElement{
             }
 
             // Select the first clue
-            selectClue(clueElements[0]);
+            selectClue(this.clueElements[0]);
 
             // Setup play timer variables
             this.elapsedMilliseconds = 0;
@@ -234,8 +234,8 @@ class MiniPage extends HTMLElement{
                 if(e.key === 'Enter'){
                     e.preventDefault();
 
-                    const currentClueIndex = clueElements.findIndex(element => element.classList.contains('highlighted'));
-                    const newClueElement = clueElements[(currentClueIndex+1) % clueElements.length];
+                    const currentClueIndex = this.clueElements.findIndex(element => element.classList.contains('highlighted'));
+                    const newClueElement = this.clueElements[(currentClueIndex+1) % this.clueElements.length];
 
                     direction = newClueElement.direction;
                     selectClue(newClueElement);
@@ -251,7 +251,6 @@ class MiniPage extends HTMLElement{
         if(this.timer){ return; }
 
         this.lastCheckedTime = Date.now();
-
         this.timer = setInterval(() => {
             const now = Date.now();
             this.elapsedMilliseconds += now - this.lastCheckedTime;
@@ -268,6 +267,8 @@ class MiniPage extends HTMLElement{
                 this.querySelector('.timer-display').innerHTML = `${Math.floor(this.playTime / 3600) ? `${hours}:` : ''}${minutes}:${seconds}`;
             }
         }, 1000/60);
+
+        for(const clueElement of this.clueElements){ clueElement.classList.remove('hidden'); }
     };
 
     stopTime(){
@@ -275,6 +276,8 @@ class MiniPage extends HTMLElement{
 
         window.clearInterval(this.timer);
         this.timer = null;
+
+        for(const clueElement of this.clueElements){ clueElement.classList.add('hidden'); }
     };
 
     show(){
