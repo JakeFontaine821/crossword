@@ -24,6 +24,7 @@ class GridCell extends HTMLElement{
     set value(newValue){
         if(!this.classList.contains('checked-correct')){ this.querySelector('.value').innerHTML = newValue; }
         this.dispatchEvent(new Event('input'));
+        this.classList.remove('checked-incorrect');
     };
 
     clear(emit=false){
