@@ -219,13 +219,13 @@ class MiniPage extends HTMLElement{
 
                 // Player input for selected square
                 if(/^[a-zA-Z]$/.test(e.key)){
-                    this.querySelector('.grid-cell.selected').value = e.key.toUpperCase();
+                    if(this.playing){ this.querySelector('.grid-cell.selected').value = e.key.toUpperCase(); }
                     return;
                 }
 
                 // Remove the value from the current selected cell and move one square back in the selected word
                 if(e.key === 'Backspace'){
-                    this.querySelector('grid-cell.selected').clear(true);
+                    if(this.playing){ this.querySelector('grid-cell.selected').clear(true); }
                     return;
                 }
 
@@ -252,15 +252,33 @@ class MiniPage extends HTMLElement{
 
             // Setup reveal functions
             const revealDropdown = this.querySelector('.reveal-dropdown');
-            revealDropdown.addEventListener('cell', () => this.querySelector('.grid-cell.selected').reveal());
-            revealDropdown.addEventListener('word', () => { for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.reveal(); } });
-            revealDropdown.addEventListener('puzzle', () => { for(const cell of this.cellArray){ cell.reveal(); } });
+            revealDropdown.addEventListener('cell', () => {
+                if(!this.playing){ return; }
+                this.querySelector('.grid-cell.selected').reveal();
+            });
+            revealDropdown.addEventListener('word', () => {
+                if(!this.playing){ return; }
+                for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.reveal(); }
+            });
+            revealDropdown.addEventListener('puzzle', () => {
+                if(!this.playing){ return; }
+                for(const cell of this.cellArray){ cell.reveal(); }
+            });
 
             // Setup check functions
             const checkDropdown = this.querySelector('.check-dropdown');
-            checkDropdown.addEventListener('cell', () => this.querySelector('.grid-cell.selected').userCheck());
-            checkDropdown.addEventListener('word', () => { for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.userCheck(); } });
-            checkDropdown.addEventListener('puzzle', () => { for(const cell of this.cellArray){ cell.userCheck(); } });
+            checkDropdown.addEventListener('cell', () => {
+                if(!this.playing){ return; }
+                this.querySelector('.grid-cell.selected').userCheck();
+            });
+            checkDropdown.addEventListener('word', () => {
+                if(!this.playing){ return; }
+                for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.userCheck(); }
+            });
+            checkDropdown.addEventListener('puzzle', () => {
+                if(!this.playing){ return; }
+                for(const cell of this.cellArray){ cell.userCheck(); }
+            });
 
             this.dispatchEvent(new Event('loaded'));
         })();
@@ -288,6 +306,8 @@ class MiniPage extends HTMLElement{
         }, 1000/60);
 
         for(const clueElement of this.clueElements){ clueElement.classList.remove('hidden'); }
+
+        this.playing = true;
     };
 
     stopTime(){
@@ -297,6 +317,8 @@ class MiniPage extends HTMLElement{
         this.timer = null;
 
         for(const clueElement of this.clueElements){ clueElement.classList.add('hidden'); }
+
+        this.playing = false;
     };
 
     show(){
