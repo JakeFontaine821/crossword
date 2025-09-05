@@ -27,6 +27,16 @@ class GridCell extends HTMLElement{
         this.classList.remove('checked-incorrect');
     };
 
+    setTextSize(dimension){
+        if(this.classList.contains('blank')){ return; }
+
+        const labelSize = dimension * (1 / 4);
+        this.querySelector('.label').style.fontSize = `${labelSize}px`;
+
+        const valueSize = dimension * (3 / 5);
+        this.querySelector('.value').style.fontSize = `${valueSize}px`;
+    };
+
     clear(emit=false){
         if(this.value && !this.classList.contains('checked-correct')){
             this.querySelector('.value').innerHTML = '';

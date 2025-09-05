@@ -129,12 +129,28 @@ class MiniPage extends HTMLElement{
             // Create the grid
             let cellIndex = 0;
             const gridContainer = this.querySelector('.grid-container');
+
+            const largerSide = (() => {
+                if(dataBody.dimensions.height === dataBody.dimensions.width){ return -1; }
+                return dataBody.dimensions.height > dataBody.dimensions.width ? 'height' : 'width';
+            })();
+            const hardCodePixelLength = 600 / (largerSide === 'height' ? dataBody.dimensions.height : dataBody.dimensions.width);
+
             for (let i = 0; i < dataBody.dimensions.height; i++) {
                 const gridRow = document.createElement('div');
                 gridRow.classList.add('grid-row');
 
                 for (let i = 0; i < dataBody.dimensions.width; i++) {
                     const newCell = new GridCell(dataBody.cells[cellIndex]);
+
+                    // Set cell size
+                    if(largerSide === -1){ newCell.style.flex = '1'; }
+                    else if(largerSide === 'height'){ newCell.style.height = `${hardCodePixelLength}px`; }
+                    else{ newCell.style.width = `${hardCodePixelLength}px`; }
+                    
+                    // Set text sizes
+                    newCell.setTextSize(hardCodePixelLength);
+
                     this.cellArray.push(newCell);
 
                     newCell.addEventListener('click', () => {
