@@ -1,5 +1,8 @@
 # Crossword
 
+Version 0.1.1
+- idk check commit messages
+
 Version 0.1.0
 - I CHANGED EVERYTHING
 - Backspace works closer to original functionality
