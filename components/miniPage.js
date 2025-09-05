@@ -153,7 +153,7 @@ class MiniPage extends HTMLElement{
 
                         // PLAYER WINS
                         if(!falseCell){
-                            this.stopTime();
+                            this.stopTime(false);
 
                             const winPopup = this.querySelector('.win-popup');
                             winPopup.setTime(this.querySelector('.timer-display').innerHTML);
@@ -205,6 +205,8 @@ class MiniPage extends HTMLElement{
             // Setup pause and resume functionality
             const pausePopup = this.querySelector('.pause-popup');
             this.querySelector('.pause-button').addEventListener('click', () => {
+                if(!this.playing){ return; }
+
                 pausePopup.classList.remove('hidden');
                 this.stopTime();
             });
@@ -310,13 +312,15 @@ class MiniPage extends HTMLElement{
         this.playing = true;
     };
 
-    stopTime(){
+    stopTime(hideClues=true){
         if(!this.timer){ return; }
 
         window.clearInterval(this.timer);
         this.timer = null;
 
-        for(const clueElement of this.clueElements){ clueElement.classList.add('hidden'); }
+        if(hideClues){
+            for(const clueElement of this.clueElements){ clueElement.classList.add('hidden'); }
+        }
 
         this.playing = false;
     };
