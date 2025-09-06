@@ -130,11 +130,12 @@ class MiniPage extends HTMLElement{
             let cellIndex = 0;
             const gridContainer = this.querySelector('.grid-container');
 
+            const desiredBoardSize = 600;
             const largerSide = (() => {
                 if(dataBody.dimensions.height === dataBody.dimensions.width){ return -1; }
                 return dataBody.dimensions.height > dataBody.dimensions.width ? 'height' : 'width';
             })();
-            const hardCodePixelLength = 600 / (largerSide === 'height' ? dataBody.dimensions.height : dataBody.dimensions.width);
+            const hardCodePixelLength = desiredBoardSize / (largerSide === 'height' ? dataBody.dimensions.height : dataBody.dimensions.width);
 
             for (let i = 0; i < dataBody.dimensions.height; i++) {
                 const gridRow = document.createElement('div');
@@ -144,7 +145,10 @@ class MiniPage extends HTMLElement{
                     const newCell = new GridCell(dataBody.cells[cellIndex]);
 
                     // Set cell size
-                    if(largerSide === -1){ newCell.style.flex = '1'; }
+                    if(largerSide === -1){
+                        gridContainer.style.width = `${desiredBoardSize}px`;
+                        newCell.style.flex = '1';
+                    }
                     else if(largerSide === 'height'){ newCell.style.height = `${hardCodePixelLength}px`; }
                     else{ newCell.style.width = `${hardCodePixelLength}px`; }
                     
