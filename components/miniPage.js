@@ -70,7 +70,7 @@ class MiniPage extends HTMLElement{
             this.saveObject = {
                 'name': 'AAA',
                 'time': 0,
-                'dataString': '',
+                'dataString': getEasternDateString(),
                 'checksUsed': 0,
                 'revealUsed': false,
             };
@@ -285,17 +285,17 @@ class MiniPage extends HTMLElement{
             revealDropdown.addEventListener('cell', () => {
                 if(!this.playing){ return; }
                 this.querySelector('.grid-cell.selected').reveal();
-                this.saveObject.revealUsed = true;
+                this.saveObject['revealUsed'] = true;
             });
             revealDropdown.addEventListener('word', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.reveal(); }
-                this.saveObject.revealUsed = true;
+                this.saveObject['revealUsed'] = true;
             });
             revealDropdown.addEventListener('puzzle', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.cellArray){ cell.reveal(); }
-                this.saveObject.revealUsed = true;
+                this.saveObject['revealUsed'] = true;
             });
 
             // Setup check functions
@@ -303,21 +303,29 @@ class MiniPage extends HTMLElement{
             checkDropdown.addEventListener('cell', () => {
                 if(!this.playing){ return; }
                 this.querySelector('.grid-cell.selected').userCheck();
-                this.saveObject.checksUsed++;
+                this.saveObject['checksUsed']++;
             });
             checkDropdown.addEventListener('word', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.userCheck(); }
-                this.saveObject.checksUsed++;
+                this.saveObject['checksUsed']++;
             });
             checkDropdown.addEventListener('puzzle', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.cellArray){ cell.userCheck(); }
-                this.saveObject.checksUsed++;
+                this.saveObject['checksUsed']++;
             });
 
+            // Listen to when user wants to save to database
             const winPopup = this.querySelector('.win-popup');
-            winPopup.addEventListener('submit', ({name}) => console.log(name));
+            winPopup.addEventListener('submit', async ({name}) => {
+                this.saveObject['name'] = name;
+                const saveResponse = await fetch('https://server-lkt6.onrender.com/nytimes/mini/time/set', {
+                    method: 'POST',
+                    body: this.saveObject
+                });
+                console.log(saveResponse.success);
+            });
 
             this.dispatchEvent(new Event('loaded'));
         })();
@@ -335,6 +343,8 @@ class MiniPage extends HTMLElement{
             if(this.elapsedMilliseconds >= 1000){
                 this.playTime += Math.floor(this.elapsedMilliseconds / 1000);
                 this.elapsedMilliseconds = this.elapsedMilliseconds % 1000;
+
+                this.saveObject['time'] = this.playTime;
 
                 // Update UI
                 const hours = `${Math.floor(this.playTime / 3600)}`.padStart(2, '0');
