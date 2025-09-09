@@ -10,7 +10,7 @@ class MiniPage extends HTMLElement{
                 <div class="config-row">
                     <div class="timer-display">00:00</div>
                     <div class="pause-button"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M360-320h80v-320h-80v320Zm160 0h80v-320h-80v320ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg></div>
-                    
+
                     <div class="dropdown-section">
                         <drop-down class="reveal-dropdown" header="Reveal" options="Cell,Word,Puzzle"></drop-down>
                         <drop-down class="check-dropdown" header="Check" options="Cell,Word,Puzzle"></drop-down>
@@ -66,6 +66,14 @@ class MiniPage extends HTMLElement{
             this.clueElements = [];
             this.cellArray = [];
             let direction = 0; // 1 for down
+
+            this.saveObject = {
+                'name': 'AAA',
+                'time': 0,
+                'dataString': '',
+                'checksUsed': 0,
+                'revealUsed': false,
+            };
 
             const selectClue = (clueElement, keepSelectedCell=false) => {
                 // Set the highlighted cells
@@ -277,14 +285,17 @@ class MiniPage extends HTMLElement{
             revealDropdown.addEventListener('cell', () => {
                 if(!this.playing){ return; }
                 this.querySelector('.grid-cell.selected').reveal();
+                this.saveObject.revealUsed = true;
             });
             revealDropdown.addEventListener('word', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.reveal(); }
+                this.saveObject.revealUsed = true;
             });
             revealDropdown.addEventListener('puzzle', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.cellArray){ cell.reveal(); }
+                this.saveObject.revealUsed = true;
             });
 
             // Setup check functions
@@ -292,15 +303,21 @@ class MiniPage extends HTMLElement{
             checkDropdown.addEventListener('cell', () => {
                 if(!this.playing){ return; }
                 this.querySelector('.grid-cell.selected').userCheck();
+                this.saveObject.checksUsed++;
             });
             checkDropdown.addEventListener('word', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.userCheck(); }
+                this.saveObject.checksUsed++;
             });
             checkDropdown.addEventListener('puzzle', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.cellArray){ cell.userCheck(); }
+                this.saveObject.checksUsed++;
             });
+
+            const winPopup = this.querySelector('.win-popup');
+            winPopup.addEventListener('submit', ({name}) => console.log(name));
 
             this.dispatchEvent(new Event('loaded'));
         })();

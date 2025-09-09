@@ -10,11 +10,67 @@ class winPopup extends HTMLElement{
                 <div class="header">You Win!</div>
                 <div class="time">00:00</div>
                 <!-- TODO set an input box to put a name for when posting score to the server -->
+                <div class="win-initial-container">
+                    <div class="selected"></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="submit-score-button">
+                    Submit Score
+                </div>
             </div>
         `;
 
+        const winInitialContainer = this.querySelector('.win-initial-container');
+        const initialContainers = Array.from(winInitialContainer.children);
+        let selectedIndex = 0;
+
+        const selectInitialContainer = (index) => {
+            for(const initial of initialContainers){ initial.classList.remove('selected'); }
+            initialContainers[index].classList.add('selected');
+        };
+
+        for(const initialContainer of initialContainers){
+            initialContainer.addEventListener('click', () => {
+                selectedIndex = initialContainers.findIndex(initialContainer);
+                selectInitialContainer(selectedIndex);
+            });
+        }
+
+        // Define player input
+        document.addEventListener('keydown', (e) => {
+            if(this.classList.contains('hidden')){ return; }
+
+            if(/^[a-zA-Z]$/.test(e.key)){
+                const key = e.key.toUpperCase();
+                winInitialContainer.querySelector('.selected').innerHTML = key;
+
+                if(selectedIndex >= 2){ return; }
+
+                selectedIndex++;
+                selectInitialContainer(selectedIndex);
+            }
+
+            if(e.key === 'Backspace'){
+                if(winInitialContainer.querySelector('.selected').innerHTML || selectedIndex <= 0){
+                    winInitialContainer.querySelector('.selected').innerHTML = '';
+                    this.classList.add('hidden');
+                    return;
+                }
+
+                selectedIndex--;
+                selectInitialContainer(selectedIndex);
+                initialContainers[selectedIndex].innerHTML = '';
+                this.classList.add('hidden');
+                return;
+            }
+        });
+
         // close the panel
         this.querySelector('.close-button').addEventListener('click', () => this.classList.add('hidden'));
+
+        // send score too server
+        this.querySelector('.submit-score-button').addEventListener('click', () => this.dispatchEvent(Object.assign(new Event('submit'), { name: Array.from(this.querySelector('.win-initial-container').children, element => element.innerHTML).join('') })));
     };
 
     setTime(time){

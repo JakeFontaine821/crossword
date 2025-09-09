@@ -189,7 +189,7 @@ body *{
     font-size: 50px;
 }
 
-.pause-popup .resume-button{
+.popup :is(.resume-button, .submit-score-button){
     display: flex;
     align-items: center;
     justify-content: center;
@@ -200,6 +200,30 @@ body *{
     border-radius: 25px;
     cursor: pointer;
     user-select: none;
+}
+
+.win-popup .win-initial-container{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 0px;
+}
+
+.win-popup .win-initial-container > div{
+    width: 40px;
+    height: 60px;
+    border: 1px solid var(--shadow-background);
+    border-radius: 2px;
+    font-size: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.win-popup .win-initial-container > div.selected{
+    border: 1px solid black;
 }
 
 .popup .close-button{
