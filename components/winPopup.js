@@ -32,7 +32,7 @@ class winPopup extends HTMLElement{
 
         for(const initialContainer of initialContainers){
             initialContainer.addEventListener('click', () => {
-                selectedIndex = initialContainers.findIndex(initialContainer);
+                selectedIndex = initialContainers.findIndex(container => container === initialContainer);
                 selectInitialContainer(selectedIndex);
             });
         }
@@ -54,14 +54,12 @@ class winPopup extends HTMLElement{
             if(e.key === 'Backspace'){
                 if(winInitialContainer.querySelector('.selected').innerHTML || selectedIndex <= 0){
                     winInitialContainer.querySelector('.selected').innerHTML = '';
-                    this.classList.add('hidden');
                     return;
                 }
 
                 selectedIndex--;
                 selectInitialContainer(selectedIndex);
                 initialContainers[selectedIndex].innerHTML = '';
-                this.classList.add('hidden');
                 return;
             }
         });
@@ -70,7 +68,10 @@ class winPopup extends HTMLElement{
         this.querySelector('.close-button').addEventListener('click', () => this.classList.add('hidden'));
 
         // send score too server
-        this.querySelector('.submit-score-button').addEventListener('click', () => this.dispatchEvent(Object.assign(new Event('submit'), { name: Array.from(this.querySelector('.win-initial-container').children, element => element.innerHTML).join('') })));
+        this.querySelector('.submit-score-button').addEventListener('click', () => {
+            if(initialContainers.some(element => !element.innerHTML)){ return; }
+            this.dispatchEvent(Object.assign(new Event('submit'), { name: Array.from(this.querySelector('.win-initial-container').children, element => element.innerHTML).join('') }));
+        });
     };
 
     setTime(time){

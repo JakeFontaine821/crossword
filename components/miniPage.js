@@ -70,9 +70,9 @@ class MiniPage extends HTMLElement{
             this.saveObject = {
                 'name': 'AAA',
                 'time': 0,
-                'dataString': getEasternDateString(),
+                'dateString': getEasternDateString(),
                 'checksUsed': 0,
-                'revealUsed': false,
+                'revealUsed': 0,
             };
 
             const selectClue = (clueElement, keepSelectedCell=false) => {
@@ -285,17 +285,17 @@ class MiniPage extends HTMLElement{
             revealDropdown.addEventListener('cell', () => {
                 if(!this.playing){ return; }
                 this.querySelector('.grid-cell.selected').reveal();
-                this.saveObject['revealUsed'] = true;
+                this.saveObject['revealUsed'] = 1;
             });
             revealDropdown.addEventListener('word', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.querySelectorAll('.grid-cell.highlighted')){ cell.reveal(); }
-                this.saveObject['revealUsed'] = true;
+                this.saveObject['revealUsed'] = 1;
             });
             revealDropdown.addEventListener('puzzle', () => {
                 if(!this.playing){ return; }
                 for(const cell of this.cellArray){ cell.reveal(); }
-                this.saveObject['revealUsed'] = true;
+                this.saveObject['revealUsed'] = 1;
             });
 
             // Setup check functions
@@ -319,12 +319,21 @@ class MiniPage extends HTMLElement{
             // Listen to when user wants to save to database
             const winPopup = this.querySelector('.win-popup');
             winPopup.addEventListener('submit', async ({name}) => {
-                this.saveObject['name'] = name;
-                const saveResponse = await fetch('https://server-lkt6.onrender.com/nytimes/mini/time/set', {
-                    method: 'POST',
-                    body: this.saveObject
-                });
-                console.log(saveResponse.success);
+                try{
+                    this.saveObject['name'] = name;
+                    const saveResponse = await fetch('https://server-lkt6.onrender.com/nytimes/mini/time/set', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.saveObject)
+                    });
+                    if (!saveResponse.ok) { throw new Error(`HTTP error! Status: ${saveResponse.status}`); }
+
+                    const data = await saveResponse.json();
+                    if (!data.success) { throw new Error(data.error); }
+
+                    winPopup.classList.add('hidden');
+                }
+                catch(err){ console.error('Error saving time: ', err); }
             });
 
             this.dispatchEvent(new Event('loaded'));
