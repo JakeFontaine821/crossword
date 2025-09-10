@@ -18,6 +18,7 @@ class winPopup extends HTMLElement{
                 <div class="submit-score-button">
                     Submit Score
                 </div>
+                <div style="color: #47af55ff" class="saved-text hidden"><i>Saved</i></div>
             </div>
         `;
 
@@ -68,7 +69,9 @@ class winPopup extends HTMLElement{
         this.querySelector('.close-button').addEventListener('click', () => this.classList.add('hidden'));
 
         // send score too server
-        this.querySelector('.submit-score-button').addEventListener('click', () => {
+        const submitScoreButton = this.querySelector('.submit-score-button');
+        submitScoreButton.addEventListener('click', () => {
+            submitScoreButton.classList.add('loading');
             if(initialContainers.some(element => !element.innerHTML)){ return; }
             this.dispatchEvent(Object.assign(new Event('submit'), { name: Array.from(this.querySelector('.win-initial-container').children, element => element.innerHTML).join('') }));
         });
@@ -76,6 +79,11 @@ class winPopup extends HTMLElement{
 
     setTime(time){
         this.querySelector('.time').innerHTML = time;
+    };
+
+    showSavedText(){
+        this.querySelector('.submit-score-button').classList.remove('loading');
+        this.querySelector('.saved-text').classList.remove('hidden');
     };
 };
 customElements.define('win-popup', winPopup);

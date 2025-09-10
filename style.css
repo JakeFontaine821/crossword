@@ -41,6 +41,32 @@ body *{
     opacity: 30%;
 }
 
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: var(--loading-size, 75%);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%) rotate(0deg);
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: var(--loading-thickness, 4px) solid transparent;
+    border-top-color: var(--loading-color, black);
+    clip-path: inset(0 0 50% 0);
+    animation: loading-spin var(--loading-duration, 1s) linear infinite;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+@keyframes loading-spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 /************************** NAV PANEL **************************/
 .nav-panel{
     position: relative;
