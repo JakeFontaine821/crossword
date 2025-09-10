@@ -127,7 +127,16 @@ body *{
 }
 
 /************************** LANDING PAGE **************************/
+.leaderboard-container{
+    display: flex;
+    justify-content: start;
+}
 
+.leaderboard-container > *{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
 /************************** HEADER SECTION **************************/
 .header-row{

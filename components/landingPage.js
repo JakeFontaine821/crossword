@@ -5,8 +5,13 @@ class landingPage extends HTMLElement{
         this.classList.add('landing-page', 'page');
 
         this.innerHTML = `
-            Hello :)
-            This is my page, games are on the left
+            <div class="page-container">
+                <div class="header-row">Mini Crossword :)</div>
+                <div class="leaderboard-container">
+                    <div class="mini-daily-board"></div>
+                    <div class="mini-leaderboard"></div>
+                </div>
+            </div>
         `;
     };
 
