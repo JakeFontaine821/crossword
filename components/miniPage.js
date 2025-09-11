@@ -322,8 +322,8 @@ class MiniPage extends HTMLElement{
             winPopup.addEventListener('submit', async ({name}) => {
                 try{
                     this.saveObject['name'] = name;
-                    const saveResponse = await fetch('http://localhost:4000/nytimes/mini/time/set', {
-                    // const saveResponse = await fetch('https://server-lkt6.onrender.com/nytimes/mini/time/set', {
+                    // const saveResponse = await fetch('http://localhost:4000/nytimes/mini/time/set', {
+                    const saveResponse = await fetch('https://server-lkt6.onrender.com/nytimes/mini/time/set', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(this.saveObject)
