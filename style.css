@@ -41,6 +41,54 @@ body *{
     opacity: 30%;
 }
 
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: var(--loading-size, 75%);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%) rotate(0deg);
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: var(--loading-thickness, 4px) solid transparent;
+    border-top-color: var(--loading-color, black);
+    clip-path: inset(0 0 50% 0);
+    animation: loading-spin var(--loading-duration, 1s) linear infinite;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+@keyframes loading-spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track (background of scrollbar) */
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+/* Thumb (the draggable handle) */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+/* Thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 /************************** NAV PANEL **************************/
 .nav-panel{
     position: relative;
@@ -101,7 +149,65 @@ body *{
 }
 
 /************************** LANDING PAGE **************************/
+.landing-page .header-row{
+    font-size: 60px;
+    font-weight: 600;    
+}
 
+.leaderboard-section{
+    display: flex;
+    justify-content: start;
+    gap: 5px;
+}
+
+.leaderboard-section > *{
+    flex: 1;
+    display: flex;
+    border-radius: 5px;
+    padding: 5px 0px;
+}
+
+.landing-page .leaderboard-outer{
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.landing-page .mini-leaderboards-container{
+    background-color: var(--hover);
+}
+
+/************************** LEADERBOARD ENTRY **************************/
+.leaderboard-entry{
+    display: flex;
+    align-items: center;
+    width: 300px;
+    font-weight: 500;
+    gap: 5px;
+    padding: 2px 6px;
+}
+
+.leaderboard-entry > div{
+    display: flex;
+    align-items: center;
+}
+
+.leaderboard-entry .place-container{
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.leaderboard-entry .name{
+    flex: 1;
+}
+
+.leaderboard-entry svg{
+    height: 30px;
+    width: 30px;
+}
 
 /************************** HEADER SECTION **************************/
 .header-row{
@@ -189,7 +295,7 @@ body *{
     font-size: 50px;
 }
 
-.pause-popup .resume-button{
+.popup :is(.resume-button, .submit-score-button){
     display: flex;
     align-items: center;
     justify-content: center;
@@ -200,6 +306,30 @@ body *{
     border-radius: 25px;
     cursor: pointer;
     user-select: none;
+}
+
+.win-popup .win-initial-container{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 0px;
+}
+
+.win-popup .win-initial-container > div{
+    width: 40px;
+    height: 60px;
+    border: 1px solid var(--shadow-background);
+    border-radius: 2px;
+    font-size: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.win-popup .win-initial-container > div.selected{
+    border: 1px solid black;
 }
 
 .popup .close-button{
