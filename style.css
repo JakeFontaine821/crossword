@@ -67,6 +67,28 @@ body *{
     to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track (background of scrollbar) */
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+/* Thumb (the draggable handle) */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+/* Thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 /************************** NAV PANEL **************************/
 .nav-panel{
     position: relative;
@@ -127,15 +149,64 @@ body *{
 }
 
 /************************** LANDING PAGE **************************/
-.leaderboard-container{
-    display: flex;
-    justify-content: start;
+.landing-page .header-row{
+    font-size: 60px;
+    font-weight: 600;    
 }
 
-.leaderboard-container > *{
+.leaderboard-section{
+    display: flex;
+    justify-content: start;
+    gap: 5px;
+}
+
+.leaderboard-section > *{
     flex: 1;
     display: flex;
-    flex-direction: column;
+    border-radius: 5px;
+    padding: 5px 0px;
+}
+
+.landing-page .leaderboard-outer{
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.landing-page .mini-leaderboards-container{
+    background-color: var(--hover);
+}
+
+/************************** LEADERBOARD ENTRY **************************/
+.leaderboard-entry{
+    display: flex;
+    align-items: center;
+    width: 300px;
+    font-weight: 500;
+    gap: 5px;
+    padding: 2px 6px;
+}
+
+.leaderboard-entry > div{
+    display: flex;
+    align-items: center;
+}
+
+.leaderboard-entry .place-container{
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.leaderboard-entry .name{
+    flex: 1;
+}
+
+.leaderboard-entry svg{
+    height: 30px;
+    width: 30px;
 }
 
 /************************** HEADER SECTION **************************/

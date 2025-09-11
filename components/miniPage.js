@@ -44,9 +44,9 @@ class MiniPage extends HTMLElement{
 
             while (!apiCall) {
                 try{
-                    const response = await fetch('http://localhost:4000/nytimes/mini');
-                    // const response = await fetch('https://server-lkt6.onrender.com/nytimes/mini');
-                    if(!response.ok){ throw new Error(`HTTP error, Status: ${response.status}`) };
+                    // const response = await fetch('http://localhost:4000/nytimes/mini');
+                    const response = await fetch('https://server-lkt6.onrender.com/nytimes/mini');
+                    if(!response.ok){ throw new Error(`HTTP error, Status: ${response.status}`); };
 
                     apiCall = response;
                 }
@@ -358,10 +358,7 @@ class MiniPage extends HTMLElement{
                 this.saveObject['time'] = this.playTime;
 
                 // Update UI
-                const hours = `${Math.floor(this.playTime / 3600)}`.padStart(2, '0');
-                const minutes = `${Math.floor(this.playTime / 60) % 60}`.padStart(2, '0');
-                const seconds = `${this.playTime % 60}`.padStart(2, '0');
-                this.querySelector('.timer-display').innerHTML = `${Math.floor(this.playTime / 3600) ? `${hours}:` : ''}${minutes}:${seconds}`;
+                this.querySelector('.timer-display').innerHTML = formatSecondsToHMS(this.playTime);
             }
         }, 1000/60);
 
