@@ -1,5 +1,9 @@
 # Crossword
 
+Version 1.0.0
+- Landing page has leader boards
+- times are saveable in server and are displayed on landing page
+
 Version 0.1.1
 - idk check commit messages
 
