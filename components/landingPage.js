@@ -9,12 +9,18 @@ class landingPage extends HTMLElement{
                 <div class="header-row">Free NYTimes Games</div>
                 <div class="leaderboard-section">
                     <div class="mini-leaderboards-container">
-                        <div class="mini-daily-board leaderboard-outer" style="border-right: 1px solid black">
-                            <div class="leaderboard-inner"></div>
+                        <div class="mini-daily-board">
+                            <b>Today's Leaderboard</b>
+                            <div class=" leaderboard-outer" style="border-right: 1px solid black">
+                                <div class="leaderboard-inner"></div>
+                            </div>
                         </div>
 
-                        <div class="mini-leaderboard leaderboard-outer">
-                            <div class="leaderboard-inner"></div>
+                        <div class="mini-leaderboard">
+                            <b>All Time Leaderboard</b>
+                            <div class="leaderboard-outer">
+                                <div class="leaderboard-inner"></div>
+                            </div>
                         </div>
                     </div>
                     <!-- Other leaderboarders here -->
