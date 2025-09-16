@@ -45,7 +45,8 @@ class MiniPage extends HTMLElement{
             while (!apiCall) {
                 try{
                     // const response = await fetch('http://localhost:4000/nytimes/mini');
-                    const response = await fetch('https://server-lkt6.onrender.com/nytimes/mini');
+                    // const response = await fetch('https://server-lkt6.onrender.com/nytimes/mini');
+                    const response = await fetch('http://kmontambault.freeddns.org:62999/nyt/nytimes/mini');
                     if(!response.ok){ throw new Error(`HTTP error, Status: ${response.status}`); };
 
                     apiCall = response;
@@ -279,6 +280,14 @@ class MiniPage extends HTMLElement{
                     selectClue(newClueElement);
                     return;
                 }
+
+                // if(e.key === 'ArrowUp'){ // Dont worry about it
+                //     const selectedCell = this.querySelector('.grid-cell.selected');
+                //     const indexOfSelectedCell = this.cellArray.findIndex(cell => cell === selectedCell);
+
+                //     selectedCell.classList.remove('selected');
+                //     this.cellArray[indexOfSelectedCell - dataBody.dimensions.width].classList.add('selected');
+                // }
             });
 
             // Setup reveal functions
@@ -323,7 +332,8 @@ class MiniPage extends HTMLElement{
                 try{
                     this.saveObject['name'] = name;
                     // const saveResponse = await fetch('http://localhost:4000/nytimes/mini/time/set', {
-                    const saveResponse = await fetch('https://server-lkt6.onrender.com/nytimes/mini/time/set', {
+                    // const saveResponse = await fetch('https://server-lkt6.onrender.com/nytimes/mini/time/set', {
+                    const saveResponse = await fetch('http://kmontambault.freeddns.org:62999/nyt/nytimes/mini/time/set', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(this.saveObject)

@@ -37,7 +37,8 @@ class landingPage extends HTMLElement{
             while (!mini_dailyBoardJson?.success) {
                 try{
                     // const response = await fetch('http://localhost:4000/nytimes/mini/times/today');
-                    const response = await fetch('https://server-lkt6.onrender.com/nytimes/mini/times/today');
+                    // const response = await fetch('https://server-lkt6.onrender.com/nytimes/mini/times/today');
+                    const response = await fetch('http://kmontambault.freeddns.org:62999/nyt/nytimes/mini/times/today');
                     if(!response.ok){ throw new Error(`HTTP error, Status: ${response.status}`); };
                     mini_dailyBoardFetch = response;
 
@@ -69,7 +70,8 @@ class landingPage extends HTMLElement{
             while (!mini_leaderBoardJson?.success) {
                 try{
                     // const response = await fetch('http://localhost:4000/nytimes/mini/times/leaderboard');
-                    const response = await fetch('https://server-lkt6.onrender.com/nytimes/mini/times/leaderboard');
+                    // const response = await fetch('https://server-lkt6.onrender.com/nytimes/mini/times/leaderboard');
+                    const response = await fetch('http://kmontambault.freeddns.org:62999/nyt/nytimes/mini/times/leaderboard');
                     if(!response.ok){ throw new Error(`HTTP error, Status: ${response.status}`); };
                     mini_leaderBoardFetch = response;
 
