@@ -3,8 +3,8 @@ class leaderboardEntry extends HTMLElement{
         super();
 
         this.classList.add('leaderboard-entry');
-        
-        const [year, month, day] = dateStr.split("-").map(Number);
+        console.log(entryData)
+        const [year, month, day] = entryData.dateString.split("-").map(Number);
         const parsedDate = new Date(Date.UTC(year, month - 1, day + 1));
 
         this.innerHTML = `
